@@ -1,0 +1,7 @@
+const member = await this.prisma.user.create({
+    data: {
+        id: randomUUID(),
+        name,
+        description,
+    },
+})
