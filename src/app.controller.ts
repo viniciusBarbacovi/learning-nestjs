@@ -3,19 +3,27 @@ import { AppService } from './app.service';
 import { PrismaService } from './Database/prisma.service';
 import { randomUUID } from 'crypto';
 import { createMemberBody } from './dtos/create-user-body';
-import { createUserRepositories } from './repositories/user-repositories';
+import { createUserRepositories } from './repositories/users/create-user-repositories';
+import { getUserRepositories } from './repositories/users/get-users-repositories'
 
 @Controller()       //prefixo para todas as rotas, se colocasse @Controller('app') essa rota seria http://localhost:3000/app/hello
 export class AppController {
   constructor(
-    private CreateUserRepositories: createUserRepositories
+    private CreateUserRepositories: createUserRepositories,
+    private GetUserRepositories: getUserRepositories
   ) { }
 
-  @Post('Hello')     //rota  http://localhost:3000/hello
-  async getHello(@Body() body: createMemberBody) {
+  @Post('create')     //rota  http://localhost:3000/create
+  async createUser(@Body() body: createMemberBody) {
     const { name, description } = body;
 
-    await this.CreateUserRepositories.create(name, description)
+    return await this.CreateUserRepositories.create(name, description)
 
   }
+
+  @Get('get')
+  async getUsers(){
+    return await this.GetUserRepositories.findMany()
+  }
+
 }
