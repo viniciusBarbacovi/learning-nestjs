@@ -14,7 +14,7 @@ Um projeto pessoal para aprender o framework Nest.JS
 
 [NodeJS](https://nodejs.org/pt) é um ambiente de execução de código JavaScript do lado do servidor.
 
-## Comandos usados naiInstalação
+## Comandos usados na instalação
 
 ```bash
 npm install
@@ -28,6 +28,16 @@ npm i @prisma/client
 npm i class-validator
 
 npm i class-transformer
+
+```
+
+# Iniciação do projeto
+
+```bash
+
+npm run start:dev
+
+npx prisma studio //opcional
 
 ```
 
