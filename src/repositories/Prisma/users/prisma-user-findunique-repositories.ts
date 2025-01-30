@@ -11,9 +11,12 @@ export class prismaFindUniqueUserRepositories implements findUniqueUserRepositor
 			const user = await this.prisma.user.findUnique({
 				where: {
 					id: id_user,
-				},
+				}, omit:{
+					id: true,
+					updated_at: true
+				}
 			});
-			return { message: `User ${user?.name} finded successfully.` };
+			return user;
 		} catch (error) {
 			if (error.code === "P2025") {  // Código de erro do Prisma para registros não encontrados
 				return { error: "This user doesn't exist." };

@@ -34,7 +34,7 @@ export class prismaStudentUpdateRepositories implements updateStudentRepositorie
 					student_id
 				}
 			});
-			return { message: `Student ${findStudent.student.name} uptaded successfully.` };
+			return { message: `Class ${user.class_id} uptaded successfully.` };
 		} catch (error) {
 			if (error.code === "P2025") {  
 				throw new NotFoundException("This student doesn't exist.");
