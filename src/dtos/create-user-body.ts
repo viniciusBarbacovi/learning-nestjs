@@ -9,9 +9,6 @@ export class createMemberBody {
     @Length(5, 100)
     name: string;
 
-    @IsNotEmpty({
-        message: 'Descrition cannot be empty'
-    })
-    @Length(10, 100)
-    description: string;
+    @IsNotEmpty()
+    email: string;
 }

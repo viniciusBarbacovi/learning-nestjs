@@ -12,6 +12,26 @@ datasource db {
 
 model user {
   id          String @id @default(uuid())
-  name        String @unique
-  description String
+  name        String
+  email       String
+  role        Role      @default(STUDENT)
+
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+  student     Student[]
+}
+
+model Student {
+  id          String @id @default(uuid())
+
+  class_id    String
+  student_id  String 
+
+  student user  @relation(fields: [student_id], references: [id])
+}
+
+enum Role {
+  STUDENT 
+  ADMIN
+  TEACHER
 }

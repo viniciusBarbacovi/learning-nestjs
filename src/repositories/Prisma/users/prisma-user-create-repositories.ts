@@ -8,16 +8,16 @@ import { Injectable } from "@nestjs/common";
 export class prismaUserRepositories implements createUserRepositories {
     constructor(private prisma: PrismaService) {}
 
-    async create(name: string, description: string): Promise<any> {
+    async create(name: string, email: string): Promise<any> {
         try {
-            const user = await this.prisma.user.create({
+            const user = await this.prisma.user.create({    
                 data: {
                     id: randomUUID(),
                     name,
-                    description,
+                    email,
                 },
             });
-            return { name: user.name, description: user.description };
+            return { name: user.name, email: user.email };
         } catch (error) {
             if (error.code === "P2002") { 
                 return { error: "User with this name already exists." };
