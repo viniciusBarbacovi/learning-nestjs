@@ -1,37 +1,137 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model user {
-  id          String @id @default(uuid())
-  name        String
-  email       String
-  role        Role      @default(STUDENT)
-
-  created_at  DateTime? @default(now())
-  updated_at  DateTime? @default(now())
-  student     Student[]
-}
-
-model Student {
-  id          String @id @default(uuid())
-
-  class_id    String
-  student_id  String 
-
-  student user  @relation(fields: [student_id], references: [id])
-}
-
 enum Role {
-  STUDENT 
-  ADMIN
-  TEACHER
+  OWNER
+  EMPLOYEE
 }
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relações
+  profile   Profile? // Um usuário tem um perfil (opcional, mas recomendado)
+  memberships CompanyMember[] // Um usuário pode ser membro de várias empresas
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relação 1-para-1 com User. O perfil pertence a um único usuário.
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relações
+  members  CompanyMember[] // Uma empresa tem vários membros
+  invites  Invite[]        // Uma empresa pode ter vários convites ativos
+  products Product[]       // Uma empresa possui vários produtos
+  categories Category[]    // Uma empresa possui várias categorias
+}
+
+
+model CompanyMember {
+  id   String @id @default(uuid())
+  role Role
+
+  // Relação muitos-para-muitos entre User e Company.
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  // Garante que um usuário só pode ter um papel por empresa.
+  @@unique([userId, companyId])
+}
+
+// Model Invite: Armazena os códigos de convite para os funcionários entrarem em uma empresa.
+model Invite {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relação: Um convite pertence a uma única empresa.
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+}
+
+//O item principal do inventário.
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  description String? // O '?' torna o campo opcional.
+  productId   String  //identificador único do produto da empresa.
+  quantity    Int     @default(0)
+  price       Float
+
+  // Relações
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  // Garante que o productId seja único por empresa.
+  @@unique([companyId, productId])
+}
+
+//Agrupa produtos dentro de uma empresa.
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  // Relações
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  products  Product[]
+}
+
+
+
+
+// model user {
+//   id          String @id @default(uuid())
+//   name        String
+//   email       String
+//   role        Role      @default(STUDENT)
+
+//   created_at  DateTime? @default(now())
+//   updated_at  DateTime? @default(now())
+//   student     Student[]
+// }
+
+// model Student {
+//   id          String @id @default(uuid())
+
+//   class_id    String
+//   student_id  String 
+
+//   student user  @relation(fields: [student_id], references: [id])
+// }
+
+// enum Role {
+//   STUDENT 
+//   ADMIN
+//   TEACHER
+// }

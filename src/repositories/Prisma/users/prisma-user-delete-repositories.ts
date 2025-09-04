@@ -13,7 +13,7 @@ export class prismaUserDeleteRepositories implements deleteUserRepositories {
                     id: id_user,
                 },
             });
-            return { message: `User ${user.name} deleted successfully.` };
+            return { message: `User ${user.email} deleted successfully.` };
         } catch (error) {
             if (error.code === "P2025") {  // Código de erro do Prisma para registros não encontrados
                 return { error: "This user doesn't exist." };

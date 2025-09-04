@@ -13,7 +13,7 @@ export class prismaFindUniqueUserRepositories implements findUniqueUserRepositor
 					id: id_user,
 				}, omit:{
 					id: true,
-					updated_at: true
+					updatedAt: true
 				}
 			});
 			return user;

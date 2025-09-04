@@ -6,7 +6,7 @@ import { Injectable, NotFoundException  } from "@nestjs/common";
 export class prismaUserUpdateRepositories implements updateUserRepositories  {
 	constructor(private prisma: PrismaService) {}
 
-	async update(id_user: string,name: string, email: string): Promise<any> {
+	async update(id_user: string, email: string, firstName: string, lastName: string): Promise<any> {
 
 		const findUser = await this.prisma.user.findUnique({
 			where:{
@@ -23,11 +23,16 @@ export class prismaUserUpdateRepositories implements updateUserRepositories  {
 				where: {
 					id: id_user,
 				}, data: {
-					name,
-					email
+					email,
+					profile: {
+						update: {
+							firstName,
+							lastName
+						}
+					}
 				}
 			});
-			return { message: `User ${user.name} uptaded successfully.` };
+			return { message: `User ${user.email} uptaded successfully.` };
 		} catch (error) {
 			if (error.code === "P2025") {  
 				throw new NotFoundException("This user doesn't exist.");

@@ -1,9 +1,21 @@
-import { IsNotEmpty, Length } from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class updateMemberBody {
+  @IsOptional()
+  @IsString()
+  firstName?: string;
 
-	@Length(5, 100)
-	name: string;
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 
-	email: string;
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(6)
+  password?: string;
 }
