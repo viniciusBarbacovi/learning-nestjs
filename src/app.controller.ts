@@ -4,39 +4,26 @@ import { PrismaService } from './Database/prisma.service';
 import { randomUUID } from 'crypto';
 
 import { createMemberBody } from './dtos/create-user-body';
-import { deleteMemberBody } from './dtos/delete-user-body';
 import { updateMemberBody } from './dtos/update-user-body';
 
 import { createUserRepositories } from './repositories/users/create-user-repositories';
-import { getUserRepositories } from './repositories/users/get-users-repositories';
-import { deleteUserRepositories } from './repositories/users/delete-user-repositories';
 import { updateUserRepositories } from './repositories/users/update-user-repositories';
-import { findUniqueUserRepositories } from './repositories/users/findunique-user-repositories';
+import { loginUserRepositories } from './repositories/users/login-user-repositories';
+import { JwtService } from '@nestjs/jwt';
 //import {  } from './repositories/'
 
 @Controller('api/auth/')       //prefixo para todas as rotas, se colocasse @Controller('app') essa rota seria http://localhost:3000/app/hello
 export class AppController {
   constructor(
     private CreateUserRepositories: createUserRepositories,
-    private GetUserRepositories: getUserRepositories,
-    private DeleteUserRepositories : deleteUserRepositories,
     private UpdateUserRepositories : updateUserRepositories,
-    private FindUniqueUserRepositories : findUniqueUserRepositories
+    private LoginUserRepositories: loginUserRepositories,
+    private jwtService: JwtService,
   ) { }
 
   @Post('register')     //rota  http://localhost:3000/
   async createUser(@Body() CreateMemberBody: createMemberBody) {
-    return await this.CreateUserRepositories.create(CreateMemberBody.firstName, CreateMemberBody.email, CreateMemberBody.lastName, CreateMemberBody.password)
-  }
-
-  @Get()
-  async getUsers(){
-    return await this.GetUserRepositories.findMany()
-  }
-
-  @Delete(':id')
-  async deleteUsers(@Param('id') id:string){
-    return await this.DeleteUserRepositories.delete(id)
+    return await this.CreateUserRepositories.create(CreateMemberBody.firstName,CreateMemberBody.lastName, CreateMemberBody.email,  CreateMemberBody.password)
   }
 
   @Patch('update/:id')
@@ -44,39 +31,14 @@ export class AppController {
     return await this.UpdateUserRepositories.update(id, UpdateMemberBody.email ?? "", UpdateMemberBody.firstName ?? "", UpdateMemberBody.lastName ?? "", UpdateMemberBody.password ?? "")
   }
 
-  @Get(':id')
-  async getUniqueUser(@Param('id') id:string){
-    return await this.FindUniqueUserRepositories.findUnique(id)
-  }
+  @Post("login")
+    async login(@Body() body: { email: string; password: string }) {
+      const user = await this.LoginUserRepositories.login(body.email, body.password);
 
+      const payload = { sub: user.id, email: user.email };
+      const accessToken = this.jwtService.sign(payload, {
+        secret: "SUA_CHAVE_SECRETA",
+        expiresIn: "1h",
+      });return { accessToken, user };
+    }
 }
-
-// @Controller('student')
-// export class studentController{
-//   constructor(
-//     private CreateStudentRepositories: createStudentRepositories,
-//     private GetStudentsRepositories: getStudentsRepositories,
-//     private DeleteStudentRepositories: deleteStudentRepositories,
-//     private UpdateStudentRepositories: updateStudentRepositories,
-//   ) {  }
-
-//   @Post(':id')
-//   async createStudent(@Param('id') student_id:string, @Body() CreateStudentBody: createStudentBody) {
-//     return await this.CreateStudentRepositories.create(student_id, CreateStudentBody.class_id)
-//   }
-
-//   @Get()
-//   async getStudents(){
-//     return await this.GetStudentsRepositories.findMany()
-//   }
-
-//   @Delete(':id')
-//   async deleteStudent(@Param('id') id:string){
-//     return await this.DeleteStudentRepositories.delete(id)
-//   }
-
-//   @Patch(':id')
-//   async updateStudent(@Param('id') id:string, @Body() UpdateStudentBody: updateStudentBody){
-//     return await this.UpdateStudentRepositories.update(id, UpdateStudentBody.class_id, UpdateStudentBody.student_id)
-//   }
-//}
