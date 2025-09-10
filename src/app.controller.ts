@@ -1,15 +1,19 @@
-import { Body, Controller, Delete, Get, Post, Patch, Param } from '@nestjs/common';
-import { AppService } from './app.service';
-import { PrismaService } from './Database/prisma.service';
-import { randomUUID } from 'crypto';
+import { Body, Controller, Delete, Get, Post, Patch, Param, UseGuards, Request, Req } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 
-import { createMemberBody } from './dtos/create-user-body';
-import { updateMemberBody } from './dtos/update-user-body';
+import { createMemberBody } from './dtos/users/create-user-body';
+import { updateMemberBody } from './dtos/users/update-user-body';
 
 import { createUserRepositories } from './repositories/users/create-user-repositories';
 import { updateUserRepositories } from './repositories/users/update-user-repositories';
 import { loginUserRepositories } from './repositories/users/login-user-repositories';
-import { JwtService } from '@nestjs/jwt';
+
+import { createCompaniesBody } from './dtos/companies/create-companies-body';
+
+import { createCompaniesRepositories } from './repositories/companies/create-companies-repositories'
+import { getCompaniesRepositories } from './repositories/companies/get-companies-repositories';
+
 //import {  } from './repositories/'
 
 @Controller('api/auth/')       //prefixo para todas as rotas, se colocasse @Controller('app') essa rota seria http://localhost:3000/app/hello
@@ -37,8 +41,31 @@ export class AppController {
 
       const payload = { sub: user.id, email: user.email };
       const accessToken = this.jwtService.sign(payload, {
-        secret: "SUA_CHAVE_SECRETA",
+        secret: "minha_chave_secreta",
         expiresIn: "1h",
       });return { accessToken, user };
     }
+}
+
+@Controller('api/companies')
+export class CompaniesController {
+  constructor(
+    private CreateCompaniesRepositories: createCompaniesRepositories,
+    private GetUserCompaniesRepositories: getCompaniesRepositories,
+  ) { }
+
+  @UseGuards(JwtAuthGuard)
+  @Post()     //rota  http://localhost:3000/
+  async createCompanies(@Body() CreateCompaniesBody: createCompaniesBody, @Req() req:any) {
+    const userId = req.user.sub
+    return await this.CreateCompaniesRepositories.create(CreateCompaniesBody.name, userId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getCompanies(@Req() req :any) {
+    const userId = req.user.sub
+    return await this.GetUserCompaniesRepositories.get(userId);
+  }
+
 }
