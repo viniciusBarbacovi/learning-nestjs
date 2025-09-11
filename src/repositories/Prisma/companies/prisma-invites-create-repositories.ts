@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from "src/Database/prisma.service";
-import { createInvitesRepository } from "../../invites/create-invite-repositories";
+import { createInvitesRepository } from "../../companies/create-invite-repositories";
 import { randomBytes } from 'crypto';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Patch, Param, UseGuards, Request, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Patch, Param, UseGuards, Request, Req, BadRequestException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { ForbiddenException } from '@nestjs/common';
@@ -11,12 +11,19 @@ import { updateUserRepositories } from './repositories/users/update-user-reposit
 import { loginUserRepositories } from './repositories/users/login-user-repositories';
 
 import { createCompaniesBody } from './dtos/companies/create-companies-body';
+import { CreateInviteDto } from './dtos/companies/create-invites-body';
+import { JoinInviteDto } from './dtos/companies/join-invites-body';
+import { CreateProductDto } from './dtos/companies/create-product-body'
+import { CreateCategoryBody } from './dtos/companies/create-category-body'
 
 import { createCompaniesRepositories } from './repositories/companies/create-companies-repositories'
 import { getCompaniesRepositories } from './repositories/companies/get-companies-repositories';
+import { createInvitesRepository } from './repositories/companies/create-invite-repositories'
+import { joinInviteCompaniesRepositories } from './repositories/companies/join-invite-repositories'
+import { createProductRepositories } from './repositories/companies/create-product-repositories'
+import { createCategoryRepository } from './repositories/companies/create-category-repositories'
+import { CategoriesRepositories } from './repositories/companies/list-category-repositories'
 
-import { createInvitesRepository } from './repositories/invites/create-invite-repositories'
-import { CreateInviteDto } from './dtos/invites/create-invites-body'
 import { use } from 'passport';
 import { error } from 'console';
 
@@ -59,6 +66,9 @@ export class CompaniesController {
     private CreateCompaniesRepositories: createCompaniesRepositories,
     private GetUserCompaniesRepositories: getCompaniesRepositories,
     private CreateInvitesRepositories: createInvitesRepository,
+    private CreateProductRepositories: createProductRepositories,
+    private CreateCategoryRepositories: createCategoryRepository,
+    private ListCategoryRepositories: CategoriesRepositories,
   ) { }
 
   @UseGuards(JwtAuthGuard)
@@ -91,4 +101,99 @@ export class CompaniesController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('/:companyId/inventory')
+  async addProduct(@Param('companyId') companyId: string, @Body() body: CreateProductDto, @Req() req: any,) {
+    const userId = req.user.sub;
+    const member = await this.CreateInvitesRepositories['prisma'].companyMember.findFirst({
+      where: { userId, companyId },
+    });
+    if (!member || member.role !== 'OWNER') {
+      throw new ForbiddenException('Apenas o proprietário pode adicionar produtos');
+    }
+    const product = await this.CreateProductRepositories.createProduct(companyId, body);
+    return {
+      message: 'Produto criado com sucesso',
+      product,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:companyId/categories')
+  async createCategory(@Param('companyId') companyId: string, @Body() body: CreateCategoryBody, @Req() req: any,) {
+    const userId = req.user.sub;
+    const isOwner = await this.CreateCategoryRepositories.checkUserIsOwner(userId, companyId);
+    if (!isOwner) {
+      throw new ForbiddenException('Apenas o proprietário da empresa pode criar categorias.');
+    }
+    const category = await this.CreateCategoryRepositories.create(companyId, body.name);
+    return category;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:companyId/categories')
+  async listCategories(@Param('companyId') companyId: string, @Req() req: any) {
+    const userId = req.user.sub;
+    return await this.ListCategoryRepositories.listByCompany(companyId, userId);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  // @Get('/:companyId/categories')
+  // async listCategories(@Param('companyId') companyId: string, @Req() req: any,) {
+  //   const userId = req.user.sub;
+  //   const membership = await this.prisma.companyMember.findUnique({
+  //     where: { userId_companyId: { userId, companyId } },
+  //   });
+  //   if (!membership) {
+  //     throw new ForbiddenException('Você não é membro desta empresa.');
+  //   }
+  //   return this.ListCategoryRepositories.list(companyId);
+  // }
+
+}
+
+@Controller('api/invites')
+export class InvitesController {
+  constructor(
+    private JoinInvitesRepositories: joinInviteCompaniesRepositories,
+  ) { }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('join')
+  async joinCompany(@Body() body: JoinInviteDto, @Req() req: any) {
+    const userId = req.user.sub;
+    const { inviteCode } = body;
+
+    const invite = await this.JoinInvitesRepositories.findByCode(inviteCode);
+    if (!invite) {
+      throw new NotFoundException('Invalid invite code');
+    }
+
+    // 2. Checar expiração
+    if (invite.expiresAt < new Date()) {
+      throw new BadRequestException('Invite expired');
+    }
+
+    // 3. Verificar se o usuário já é membro
+    const alreadyMember = await this.JoinInvitesRepositories['prisma'].companyMember.findFirst({
+      where: { userId, companyId: invite.companyId },
+    });
+
+    if (alreadyMember) {
+      throw new BadRequestException('User is already a member of this company');
+    }
+
+    // 4. Adicionar membro
+    await this.JoinInvitesRepositories.addMember(userId, invite.companyId);
+
+    // (Opcional) invalidar o convite se for de uso único
+    // await this.inviteRepo.invalidateInvite(invite.id);
+
+    // 5. Retornar resposta
+    return {
+      message: `Successfully joined company '${invite.company.name}'`,
+      companyId: invite.company.id,
+      companyName: invite.company.name,
+    };
+  }
 }
