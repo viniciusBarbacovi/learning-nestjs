@@ -18,6 +18,9 @@ import { prismaCompaniesCreateRepositories } from './repositories/Prisma/compani
 import { getCompaniesRepositories } from './repositories/companies/get-companies-repositories'
 import { prismaCompaniesGetRepositories } from './repositories/Prisma/companies/prisma-companies-get-repositories'
 
+import { createInvitesRepository } from './repositories/invites/create-invite-repositories'
+import { PrismaInvitesCreateRepository } from './repositories/Prisma/invites/prisma-invites-create-repositories'
+
 import { JwtStrategy } from './auth/jwt.strategy';
 //import {  } from './repositories/'
 
@@ -30,6 +33,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
     {provide: loginUserRepositories, useClass: prismaLoginUserRepositories},
     {provide: createCompaniesRepositories, useClass: prismaCompaniesCreateRepositories},
     {provide: getCompaniesRepositories, useClass: prismaCompaniesGetRepositories},
+    {provide: createInvitesRepository, useClass: PrismaInvitesCreateRepository}
     ],
 })
 export class AppModule {}

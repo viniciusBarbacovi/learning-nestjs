@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Post, Patch, Param, UseGuards, Request, Req } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { ForbiddenException } from '@nestjs/common';
 
 import { createMemberBody } from './dtos/users/create-user-body';
 import { updateMemberBody } from './dtos/users/update-user-body';
@@ -13,6 +14,11 @@ import { createCompaniesBody } from './dtos/companies/create-companies-body';
 
 import { createCompaniesRepositories } from './repositories/companies/create-companies-repositories'
 import { getCompaniesRepositories } from './repositories/companies/get-companies-repositories';
+
+import { createInvitesRepository } from './repositories/invites/create-invite-repositories'
+import { CreateInviteDto } from './dtos/invites/create-invites-body'
+import { use } from 'passport';
+import { error } from 'console';
 
 //import {  } from './repositories/'
 
@@ -52,6 +58,7 @@ export class CompaniesController {
   constructor(
     private CreateCompaniesRepositories: createCompaniesRepositories,
     private GetUserCompaniesRepositories: getCompaniesRepositories,
+    private CreateInvitesRepositories: createInvitesRepository,
   ) { }
 
   @UseGuards(JwtAuthGuard)
@@ -66,6 +73,22 @@ export class CompaniesController {
   async getCompanies(@Req() req :any) {
     const userId = req.user.sub
     return await this.GetUserCompaniesRepositories.get(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/:companyId/invites')
+  async createInvite(@Param('companyId') companyId: string, @Req() req) {
+    const userId = req.user.sub
+    const isOwner = await this.CreateInvitesRepositories.checkUserIsOwner(userId, companyId);
+    if (!isOwner) {
+      throw new ForbiddenException('Apenas o proprietário da empresa pode criar convites.');
+    }
+
+    const invite = await this.CreateInvitesRepositories.createInvite(companyId);
+    return {
+      inviteCode: invite.code,
+      expiresAt: invite.expiresAt,
+    };
   }
 
 }
