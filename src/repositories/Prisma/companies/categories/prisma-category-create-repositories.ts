@@ -1,9 +1,11 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from 'src/Database/prisma.service';
-import { createCategoryRepository } from '../../companies/create-category-repositories';
+import { createCategoryRepository } from '../../../companies/categories/create-category-repositories';
 
 @Injectable()
-export class PrismaCategoriesCreateRepository implements createCategoryRepository {
+export class PrismaCategoriesCreateRepository
+  implements createCategoryRepository
+{
   constructor(private prisma: PrismaService) {}
 
   async checkUserIsOwner(userId: string, companyId: string): Promise<boolean> {

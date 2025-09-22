@@ -7,12 +7,10 @@ import * as bcrypt from "bcrypt";
 export class prismaLoginUserRepositories implements loginUserRepositories {
   constructor(private prisma: PrismaService) {}
 
-  async login(
-    email: string,
-    password: string
-  ): Promise<{ id: string; email: string }> {
+  async login(email: string,password: string): Promise<any> {
+    
     const user = await this.prisma.user.findUnique({
-      where: { email },
+      where: { email }, select: { profile:{ select:{ firstName: true, lastName: true } }, id: true, email: true, password: true}
     });
 
     if (!user) {
@@ -24,6 +22,6 @@ export class prismaLoginUserRepositories implements loginUserRepositories {
       throw new UnauthorizedException("Invalid credentials");
     }
 
-    return { id: user.id, email: user.email };
+    return { id: user.id, email: user.email, firstName: user.profile?.firstName, lastName: user.profile?.lastName};
   }
 }
