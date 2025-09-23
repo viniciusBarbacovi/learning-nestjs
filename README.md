@@ -39,52 +39,6 @@ npm run start:dev
 
 npx prisma studio //opcional
 
-```
-
-## Rotas criadas 
-
-# User 
-
-Create user
-
-Get all user
-
-Delete user
-
-Update user
-
-FindUnique user
-
-# Student
-
-Create student
-
-Get all students
-
-Delete student
-
-Update student
-
-## Resultados esperados
-
-# User
-
-![image](https://github.com/user-attachments/assets/225aa559-1070-4932-bd2f-7a22c5c5b2a6)
-
-![image](https://github.com/user-attachments/assets/72bcdd49-abff-431d-873e-5ca9c3d863a0)
-
-![image](https://github.com/user-attachments/assets/c117a23f-5d17-45c1-aad1-0580f12fd42c)
-
-![image](https://github.com/user-attachments/assets/4037b84b-a940-4112-9910-a64667bffb3a)
-
-![image](https://github.com/user-attachments/assets/2e3451eb-91a4-4397-9c88-3f1ffcbb1472)
-
-# Student
-
-![image](https://github.com/user-attachments/assets/f5affb3e-2264-4869-807c-ec8ca816d8c7)
-
-![image](https://github.com/user-attachments/assets/3507b0a4-7dc7-4a29-85b9-2ae5d84e3a08)
-
-![image](https://github.com/user-attachments/assets/153bb7c2-bcb7-41fb-bc7d-43df45418aa0)
-
 ![image](https://github.com/user-attachments/assets/a6103887-7059-440d-be22-54dfd9c10d55)
+
+```
