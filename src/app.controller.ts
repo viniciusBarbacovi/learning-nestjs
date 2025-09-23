@@ -38,6 +38,8 @@ import { createCompaniesRepositories } from './repositories/companies/companies/
 import { getCompaniesByUserRepositories } from './repositories/companies/companies/get-companies-by-user-repositories';
 import { getCompaniesMembersRepositories } from './repositories/companies/companies/get-members-by-companies-repositories';
 import { updateCargoUserRepositories } from './repositories/companies/companies/update-cargo-company-repositories';
+import { deleteMemberCompaniesRepositories } from './repositories/companies/companies/delete-member-companies-repositories';
+import { deleteCompanyRepository } from './repositories/companies/companies/delete-company-repositories';
 
 // Categories
 import { listUniqueCategoriesRepositories } from './repositories/companies/categories/list-unique-category-repositories';
@@ -156,6 +158,8 @@ export class CompaniesController {
     private ListProductRepositories: listProductRepositories,
     private UpdateProductRepositories: updateProductRepositories,
     private DeleteProductRepositories: deleteProductRepositories,
+    private DeleteMemberCompaniesRepositories: deleteMemberCompaniesRepositories,
+    private DeleteCompanyRepository: deleteCompanyRepository,
   ) {}
 
   // Companies routes
@@ -192,6 +196,22 @@ export class CompaniesController {
     );
   }
 
+  //Deleta membro de uma company
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:companyId/members/:memberId')
+  async deleteMember(
+    @Param('companyId') companyId: string,
+    @Param('memberId') memberId: string,
+    @Req() req: any,
+  ) {
+    const userId = req.user.sub;
+    return await this.DeleteMemberCompaniesRepositories.deleteMember(
+      userId,
+      companyId,
+      memberId,
+    );
+  }
+
   //Lista companies do usuário
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -200,7 +220,7 @@ export class CompaniesController {
     return await this.GetUserCompaniesByUserRepositories.get(userId);
   }
 
-  // Lista membros da company
+  //Lista membros da company
   @UseGuards(JwtAuthGuard)
   @Get('/:companyId/members')
   async getCompaniesByUser(
@@ -212,6 +232,14 @@ export class CompaniesController {
       userId,
       companyId,
     );
+  }
+
+  //Deleta company
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:companyId')
+  async deleteCompany(@Param('companyId') companyId: string, @Req() req: any) {
+    const userId = req.user.sub;
+    return await this.DeleteCompanyRepository.deleteCompany(userId, companyId);
   }
 
   // Products routes

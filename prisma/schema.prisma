@@ -59,7 +59,7 @@
     userId    String
     user      User     @relation(fields: [userId], references: [id])
     companyId String
-    company   Company  @relation(fields: [companyId], references: [id])
+    company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
     // Garante que um usuário só pode ter um papel por empresa.
     @@unique([userId, companyId])
@@ -74,7 +74,7 @@
 
     // Relação: Um convite pertence a uma única empresa.
     companyId String
-    company   Company @relation(fields: [companyId], references: [id])
+    company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   }
 
   //O item principal do inventário.
@@ -88,7 +88,7 @@
 
     // Relações
     companyId  String
-    company    Company  @relation(fields: [companyId], references: [id])
+    company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
     categoryId String
     category   Category @relation(fields: [categoryId], references: [id])
 
@@ -105,35 +105,6 @@
 
     // Relações
     companyId String
-    company   Company  @relation(fields: [companyId], references: [id])
+    company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
     products  Product[]
   }
-
-
-
-
-  // model user {
-  //   id          String @id @default(uuid())
-  //   name        String
-  //   email       String
-  //   role        Role      @default(STUDENT)
-
-  //   created_at  DateTime? @default(now())
-  //   updated_at  DateTime? @default(now())
-  //   student     Student[]
-  // }
-
-  // model Student {
-  //   id          String @id @default(uuid())
-
-  //   class_id    String
-  //   student_id  String 
-
-  //   student user  @relation(fields: [student_id], references: [id])
-  // }
-
-  // enum Role {
-  //   STUDENT 
-  //   ADMIN
-  //   TEACHER
-  // }

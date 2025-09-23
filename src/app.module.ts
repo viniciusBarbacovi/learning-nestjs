@@ -74,6 +74,12 @@ import { PrismaProductUpdateRepository } from './repositories/Prisma/companies/p
 import { deleteProductRepositories } from './repositories/companies/products/delete-product-repositories';
 import { PrismaProductDeleteRepository } from './repositories/Prisma/companies/products/prisma-product-delete-repositories';
 
+import { deleteMemberCompaniesRepositories } from './repositories/companies/companies/delete-member-companies-repositories';
+import { prismaCompaniesDeleteMemberRepositories } from './repositories/Prisma/companies/companies/prisma-companies-delete-member-repositories';
+
+import { deleteCompanyRepository } from './repositories/companies/companies/delete-company-repositories';
+import { prismaCompaniesDeleteCompanyRepositories } from './repositories/Prisma/companies/companies/prisma-companies-delete-company-repositories';
+
 import { JwtStrategy } from './auth/jwt.strategy';
 //import {  } from './repositories/'
 
@@ -159,6 +165,14 @@ import { JwtStrategy } from './auth/jwt.strategy';
     {
       provide: deleteProductRepositories,
       useClass: PrismaProductDeleteRepository,
+    },
+    {
+      provide: deleteMemberCompaniesRepositories,
+      useClass: prismaCompaniesDeleteMemberRepositories,
+    },
+    {
+      provide: deleteCompanyRepository,
+      useClass: prismaCompaniesDeleteCompanyRepositories,
     },
   ],
 })
