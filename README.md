@@ -1,99 +1,90 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## Descrição 
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Um projeto pessoal para aprender o framework Nest.JS
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologias
 
-## Description
+[TypeScript](https://www.typescriptlang.org) é JavaScript com sintaxe para tipos.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) repositório inicial TypeScript da estrutura.
 
-## Project setup
+[Prisma](https://www.prisma.io) ORM para o banco de dados.
+
+[SQLite](https://www.sqlite.org) Banco de dados SQL.
+
+[NodeJS](https://nodejs.org/pt) é um ambiente de execução de código JavaScript do lado do servidor.
+
+## Comandos usados na instalação
 
 ```bash
-$ npm install
+npm install
+
+npm install prisma
+
+npx prisma init --datasource-provider SQLite
+
+npm i @prisma/client
+
+npm i class-validator
+
+npm i class-transformer
+
 ```
 
-## Compile and run the project
+# Iniciação do projeto
 
 ```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
+npm run start:dev
 
-# production mode
-$ npm run start:prod
+npx prisma studio //opcional
+
 ```
 
-## Run tests
+## Rotas criadas 
 
-```bash
-# unit tests
-$ npm run test
+# User 
 
-# e2e tests
-$ npm run test:e2e
+Create user
 
-# test coverage
-$ npm run test:cov
-```
+Get all user
 
-## Deployment
+Delete user
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Update user
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+FindUnique user
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+# Student
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Create student
 
-## Resources
+Get all students
 
-Check out a few resources that may come in handy when working with NestJS:
+Delete student
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Update student
 
-## Support
+## Resultados esperados
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# User
 
-## Stay in touch
+![image](https://github.com/user-attachments/assets/225aa559-1070-4932-bd2f-7a22c5c5b2a6)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+![image](https://github.com/user-attachments/assets/72bcdd49-abff-431d-873e-5ca9c3d863a0)
 
-## License
+![image](https://github.com/user-attachments/assets/c117a23f-5d17-45c1-aad1-0580f12fd42c)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+![image](https://github.com/user-attachments/assets/4037b84b-a940-4112-9910-a64667bffb3a)
+
+![image](https://github.com/user-attachments/assets/2e3451eb-91a4-4397-9c88-3f1ffcbb1472)
+
+# Student
+
+![image](https://github.com/user-attachments/assets/f5affb3e-2264-4869-807c-ec8ca816d8c7)
+
+![image](https://github.com/user-attachments/assets/3507b0a4-7dc7-4a29-85b9-2ae5d84e3a08)
+
+![image](https://github.com/user-attachments/assets/153bb7c2-bcb7-41fb-bc7d-43df45418aa0)
+
+![image](https://github.com/user-attachments/assets/a6103887-7059-440d-be22-54dfd9c10d55)
