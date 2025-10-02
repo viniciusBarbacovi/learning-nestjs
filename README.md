@@ -54,12 +54,12 @@ O Inventory Hub nasceu como uma solução para um problema comum em pequenos neg
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/](https://github.com/)[SEU-USUARIO]/[NOME-DO-REPOSITORIO].git
+    git clone [https://github.com/](https://github.com/)viniciusBarbacovi/learning-nestjs.git
     ```
 
 2.  **Instale as dependências do Back-end:**
     ```bash
-    cd [NOME-DO-REPOSITORIO]
+    cd  learning-nestjs
     npm install
     ```
 
