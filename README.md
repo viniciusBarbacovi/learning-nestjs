@@ -88,5 +88,5 @@ O Inventory Hub nasceu como uma solução para um problema comum em pequenos neg
 
 **[Vinícius Paulo Barbacovi]**
 
-- **LinkedIn:** [https://www.linkedin.com/in/vinicius-barbacovi-17258b276/](https://www.linkedin.com/in/vinicius-barbacovi-17258b276/)
+- **LinkedIn:** [https://www.linkedin.com/in/viniciusbarbacovi/](https://www.linkedin.com/in/viniciusbarbacovi/)
 - **E-mail:** [viniciusbarbacovi@gmail.com](mailto:viniciusbarbacovi@gmail.com)
